@@ -106,10 +106,6 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
                             TensorFlowClassifier.create(getAssets(), "TensorFlow",
                                     "opt_mnist_convnet-tf.pb", "labels.txt", PIXEL_WIDTH,
                                     "input", "output", true));
-                    mClassifiers.add(
-                            TensorFlowClassifier.create(getAssets(), "Keras",
-                                    "opt_mnist_convnet-keras.pb", "labels.txt", PIXEL_WIDTH,
-                                    "conv2d_1_input", "dense_2/Softmax", false));
                 } catch (final Exception e) {
                     //if they aren't found, throw an error!
                     throw new RuntimeException("Error initializing classifiers!", e);
