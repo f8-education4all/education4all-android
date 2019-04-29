@@ -1,15 +1,11 @@
 package com.f82019.education4all;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +39,11 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
+
+        if(AccessToken.getCurrentAccessToken() != null){
+            setResult(RESULT_OK);
+            finish();
+        }
 
         // Creating CallbackManager
         callbackManager = CallbackManager.Factory.create();

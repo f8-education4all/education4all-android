@@ -24,6 +24,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs "$rootProject.projectDir/aars"
+        }
         
     }
 }

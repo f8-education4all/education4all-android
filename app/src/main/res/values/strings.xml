@@ -20,4 +20,5 @@
 
     <string name="facebook_app_id">350901782210649</string>
     <string name="fb_login_protocol_scheme">fb350901782210649</string>
+    <string name="title_activity_learn2_write">Learn 2 Write</string>
 </resources>
