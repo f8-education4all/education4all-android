@@ -42,17 +42,59 @@ public class Main3Activity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if (currentAccessToken != null) {
+                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
+                    useLoginInformation(currentAccessToken);
+                }else{
+                    Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_ACT);
+                }
+            }
+        };
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if (currentAccessToken != null) {
+                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
+                    useLoginInformation(currentAccessToken);
+                }else{
+                    Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_ACT);
+                }
+            }
+        };
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if (currentAccessToken != null) {
+                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
+                    useLoginInformation(currentAccessToken);
+                }else{
+                    Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_ACT);
+                }
+            }
+        };
 
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
         if (navigationView.getHeaderView(0) != null) {
@@ -82,6 +124,11 @@ public class Main3Activity extends AppCompatActivity
             }
         };
 
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_container3, new Camera2BasicFragment())

@@ -1,6 +1,9 @@
 package com.f82019.education4all;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -35,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
@@ -57,10 +60,12 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("LOGIN", accessToken.getToken());
                 useLoginInformation(accessToken);
             }
+
             @Override
             public void onCancel() {
                 finish();
             }
+
             @Override
             public void onError(FacebookException error) {
                 Log.e("LOGIN", error.toString());
@@ -76,8 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-
-printKeyHash();
+        printKeyHash();
 
     }
 
@@ -127,7 +131,6 @@ printKeyHash();
         setResult(RESULT_OK);
         finish();
     }
-
 
 
     @Override
