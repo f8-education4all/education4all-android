@@ -48,6 +48,20 @@ public class Main3Activity extends AppCompatActivity
             }
         };
 
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if (currentAccessToken != null) {
+                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
+                    useLoginInformation(currentAccessToken);
+                }else{
+                    Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_ACT);
+                }
+            }
+        };
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
