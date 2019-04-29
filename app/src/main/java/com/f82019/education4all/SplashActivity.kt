@@ -11,8 +11,13 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         Handler().postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            startActivityForResult(Intent(this, LoginActivity::class.java), 111)
+            //finish()
         },4000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        startActivity(Intent(this, Main3Activity::class.java))
     }
 }
