@@ -41,6 +41,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.f82019.education4all.R
+import com.f82019.education4all.mobilenet.MobilenetClassifier
+import com.f82019.education4all.mobilenet.MobilenetClassifierFloatException
+import com.f82019.education4all.mobilenet.ObjectDrawView
+import java.io.IOException
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.Collections
@@ -59,6 +63,9 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
     protected var textureView: AutoFitTextureView? = null
     private var layoutFrame: AutoFitFrameLayout? = null
 //    protected var drawView : DrawView? = null
+
+    private var objectDetectionClassifier : MobilenetClassifier? = null
+    private var objectDrawView : ObjectDrawView? = null
 
 
     protected var runDetector = false
@@ -222,6 +229,7 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         override fun run() {
             synchronized(lock) {
                 if (runDetector) {
+                    classifyObject()
                 }
             }
             backgroundHandler!!.postDelayed(this, 300)
@@ -238,7 +246,15 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
         textureView = view.findViewById(R.id.textureView)
         layoutFrame = view.findViewById(R.id.layoutFrame)
+        objectDrawView = view.findViewById(R.id.objectDrawView)
 //        drawView = view.findViewById(R.id.drawView)
+
+        try {
+            objectDetectionClassifier = MobilenetClassifierFloatException.create(activity)
+            objectDrawView?.setImgSize(objectDetectionClassifier!!.imageSize, objectDetectionClassifier!!.imageSize)
+        } catch (e: IOException) {
+            Log.e(TAG, "Failed to initialize an object classifier.", e)
+        }
     }
 
     override fun onResume() {
@@ -259,6 +275,7 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
     override fun onDestroy() {
         super.onDestroy()
+        objectDetectionClassifier!!.close()
     }
 
     /**
@@ -360,11 +377,11 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     layoutFrame!!.setAspectRatio(previewSize!!.width, previewSize!!.height)
                     textureView!!.setAspectRatio(previewSize!!.width, previewSize!!.height)
-//                    drawView!!.setAspectRatio(previewSize!!.width, previewSize!!.height)
+                    objectDrawView!!.setAspectRatio(previewSize!!.width, previewSize!!.height)
                 } else {
                     layoutFrame!!.setAspectRatio(previewSize!!.height, previewSize!!.width)
                     textureView!!.setAspectRatio(previewSize!!.height, previewSize!!.width)
-//                    drawView!!.setAspectRatio(previewSize!!.height, previewSize!!.width)
+                    objectDrawView!!.setAspectRatio(previewSize!!.height, previewSize!!.width)
                 }
                 this.cameraId = cameraId
                 return
@@ -583,6 +600,23 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
             //matrix.postRotate(180f, centerX, centerY)
         }
         textureView!!.setTransform(matrix)
+    }
+
+    /**
+     * Classifies a frame from the preview stream.
+     */
+    private fun classifyObject() {
+        if (objectDetectionClassifier == null || activity == null || cameraDevice == null) {
+            Log.e("Mobilenet", "Uninitialized Classifier or invalid context.")
+            return
+        }
+        val bitmap = textureView!!.getBitmap(objectDetectionClassifier!!.imageSize, objectDetectionClassifier!!.imageSize)
+        val textToShow = objectDetectionClassifier!!.classifyFrame(bitmap)
+        bitmap.recycle()
+
+        objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
+        objectDrawView?.invalidate()
+
     }
 
     /**
