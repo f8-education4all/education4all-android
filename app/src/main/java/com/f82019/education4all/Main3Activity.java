@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f82019.education4all.camera.Camera2BasicFragment;
@@ -18,14 +20,23 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class Main3Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     static final int LOGIN_ACT = 123;
     private AccessTokenTracker accessTokenTracker;
+
+    ImageView profile_img;
+    TextView profile_name, profile_email;
+
+    MenuItem nav_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +45,7 @@ public class Main3Activity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                // currentAccessToken is null if the user is logged out
-                if (currentAccessToken != null) {
-                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
-                    useLoginInformation(currentAccessToken);
-                }else{
-                    Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
-                    startActivityForResult(intent, LOGIN_ACT);
-                }
-            }
-        };
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -55,6 +54,33 @@ public class Main3Activity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (navigationView.getHeaderView(0) != null) {
+            profile_img = navigationView.getHeaderView(0).findViewById(R.id.imageView_profil);
+            profile_name = navigationView.getHeaderView(0).findViewById(R.id.tv_profile_name);
+            profile_email = navigationView.getHeaderView(0).findViewById(R.id.tv_profil_email);
+        }
+
+        nav_login  = navigationView.getMenu().findItem(R.id.nav_login);
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if (currentAccessToken != null) {
+                    // AccessToken is not null implies user is logged in and hence we sen the GraphRequest
+                    nav_login.setTitle("Sign out");
+                    useLoginInformation(currentAccessToken);
+                } else {
+                    //Intent intent = new Intent(Main3Activity.this, LoginActivity.class);
+                    //startActivityForResult(intent, LOGIN_ACT);
+                    profile_name.setText("Your name");
+                    profile_email.setText("Your email");
+                    profile_img.setImageResource(R.mipmap.ic_launcher);
+                    nav_login.setTitle("Sign in");
+                }
+            }
+        };
 
         getFragmentManager()
                 .beginTransaction()
@@ -101,20 +127,24 @@ public class Main3Activity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        switch (id) {
+            case R.id.nav_login:
+                if(AccessToken.getCurrentAccessToken() == null){
+                    intent = new Intent(this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_ACT);
+                }else {
+                    LoginManager.getInstance().logOut();
+                }
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_login) {
-            intent = new Intent(this, LoginActivity.class);
-            startActivityForResult(intent, LOGIN_ACT);
+                break;
+            case R.id.nav_object_detection:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container3, new Camera2BasicFragment())
+                        .commit();
+                break;
         }
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -124,17 +154,12 @@ public class Main3Activity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LOGIN_ACT){
-                Toast.makeText(this, "Login finished!", Toast.LENGTH_LONG).show();
+        if (requestCode == LOGIN_ACT) {
+            Toast.makeText(this, "Login finished!", Toast.LENGTH_LONG).show();
         }
     }
 
     private void useLoginInformation(AccessToken accessToken) {
-        /**
-         Creating the GraphRequest to fetch user details
-         1st Param - AccessToken
-         2nd Param - Callback (which will be invoked once the request is successful)
-         **/
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             //OnCompleted is invoked once the GraphRequest is successful
             @Override
@@ -143,8 +168,20 @@ public class Main3Activity extends AppCompatActivity
                     String name = object.getString("name");
                     String email = object.getString("email");
                     String image = object.getJSONObject("picture").getJSONObject("data").getString("url");
-                    //displayName.setText(name);
-                    //emailID.setText(email);
+
+                    try {
+                        Picasso.with(Main3Activity.this)
+                                .load(image)
+                                .resize(150, 150)
+                                .transform(new RoundedCornersTransformation(90, 1))
+                                .centerCrop().into(profile_img);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    profile_name.setText(name);
+                    profile_email.setText(email);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
