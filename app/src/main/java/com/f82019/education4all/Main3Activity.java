@@ -6,9 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -190,6 +188,10 @@ public class Main3Activity extends AppCompatActivity
                         .replace(R.id.frame_container3, new Camera2BasicFragment())
                         .commit();
                 break;
+            case R.id.nav_learn_to_write:
+                intent = new Intent(Main3Activity.this, Learn2WriteActivity.class);
+                startActivity(intent);
+                break;
         }
 
 
@@ -228,6 +230,7 @@ public class Main3Activity extends AppCompatActivity
 
                     profile_name.setText(name);
                     profile_email.setText(email);
+                    nav_login.setTitle("Sign out");
 
                 } catch (Exception e) {
                     e.printStackTrace();
