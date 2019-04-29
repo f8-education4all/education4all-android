@@ -41,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
 
+        if(AccessToken.getCurrentAccessToken() != null){
+            setResult(RESULT_OK);
+            finish();
+        }
+
         // Creating CallbackManager
         callbackManager = CallbackManager.Factory.create();
         // Registering CallbackManager with the LoginButton
