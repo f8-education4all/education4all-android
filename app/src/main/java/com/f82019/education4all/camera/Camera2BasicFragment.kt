@@ -58,7 +58,6 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
     protected var textureView: AutoFitTextureView? = null
     private var layoutFrame: AutoFitFrameLayout? = null
-    private var tvState: TextView? = null
 //    protected var drawView : DrawView? = null
 
 
@@ -229,18 +228,6 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         }
     }
 
-    /**
-     * Shows a [Toast] on the UI thread for the classification results.
-     *
-     * @param text The message to show
-     */
-    protected fun showTextview(text: String) {
-        val activity = activity
-        activity?.runOnUiThread {
-            tvState?.text = text
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_camera2_basic, container, false)
         return view
@@ -251,7 +238,6 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
         textureView = view.findViewById(R.id.textureView)
         layoutFrame = view.findViewById(R.id.layoutFrame)
-        tvState = view.findViewById(R.id.tvState)
 //        drawView = view.findViewById(R.id.drawView)
     }
 

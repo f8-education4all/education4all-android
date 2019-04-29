@@ -13,4 +13,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="splash_margin_top_logo_tv">24dp</dimen>
     <dimen name="login_margin_top_logo_tv">12dp</dimen>
+    <dimen name="camera_margin_left_iv_rotate_parent">50dp</dimen>
+    <dimen name="camera_margin_right_layout_speak_parent">50dp</dimen>
 </resources>
