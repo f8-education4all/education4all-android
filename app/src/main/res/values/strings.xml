@@ -8,4 +8,16 @@
     <string name="action_settings">Settings</string>
     <string name="request_permission">Camera access is required.</string>
     <string name="camera_error">The device does not support the Camera2 API.</string>
+    <string name="title_activity_main3">Main3Activity</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_login">Login</string>
+
+    <string name="facebook_app_id">350901782210649</string>
+    <string name="fb_login_protocol_scheme">fb350901782210649</string>
 </resources>
