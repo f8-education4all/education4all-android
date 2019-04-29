@@ -13,7 +13,7 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
             startActivityForResult(Intent(this, LoginActivity::class.java), 111)
             //finish()
-        },4000)
+        },3000)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
