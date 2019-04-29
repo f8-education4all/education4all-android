@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 });
@@ -118,6 +119,8 @@ printKeyHash();
         request.setParameters(parameters);
         // Initiate the GraphRequest
         request.executeAsync();
+        setResult(RESULT_OK);
+        finish();
     }
 
 
