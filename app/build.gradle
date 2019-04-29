@@ -32,6 +32,10 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[4,5)'
     //lottie
     implementation "com.airbnb.android:lottie:$lottie_version"
+
+
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'jp.wasabeef:picasso-transformations:2.1.0'
 }
 repositories {
     mavenCentral()
