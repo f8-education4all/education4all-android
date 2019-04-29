@@ -44,6 +44,7 @@ import com.f82019.education4all.R
 import com.f82019.education4all.mobilenet.MobilenetClassifier
 import com.f82019.education4all.mobilenet.MobilenetClassifierFloatException
 import com.f82019.education4all.mobilenet.ObjectDrawView
+import kotlinx.android.synthetic.main.fragment_camera2_basic.*
 import java.io.IOException
 import java.util.ArrayList
 import java.util.Arrays
@@ -69,7 +70,7 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
 
     protected var runDetector = false
-    private var isFacingFront: Boolean = true
+    private var isFacingFront: Boolean = false
 
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
@@ -254,6 +255,16 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
             objectDrawView?.setImgSize(objectDetectionClassifier!!.imageSize, objectDetectionClassifier!!.imageSize)
         } catch (e: IOException) {
             Log.e(TAG, "Failed to initialize an object classifier.", e)
+        }
+
+        setListener()
+    }
+
+    fun setListener(){
+        ibRotate.setOnClickListener {
+            isFacingFront = !isFacingFront
+            closeCamera()
+            openCamera(previewSize!!.width, previewSize!!.height)
         }
     }
 

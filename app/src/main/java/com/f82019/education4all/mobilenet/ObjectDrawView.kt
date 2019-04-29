@@ -16,7 +16,7 @@ class ObjectDrawView : View {
 
     private var mRatioWidth = 0
     private var mRatioHeight = 0
-    private var mObjectHash = HashMap<RectF, Boolean>()
+    private var mObjectHash = HashMap<RectF, String>()
     private var mWidth: Int = 0
     private var mHeight: Int = 0
     private var mRatioX: Float = 0.toFloat()
@@ -30,6 +30,18 @@ class ObjectDrawView : View {
     }
 
     private val mPaint: Paint by lazy {
+        Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
+            style = FILL
+            strokeWidth = dip(2).toFloat()
+        }
+    }
+    private val bPaint: Paint by lazy {
+        Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
+            style = FILL
+            strokeWidth = dip(2).toFloat()
+        }
+    }
+    private val tPaint: Paint by lazy {
         Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
             style = STROKE
             strokeWidth = dip(2).toFloat()
@@ -71,17 +83,11 @@ class ObjectDrawView : View {
             val right: Float = recognitions[i].location.right / mRatioX
             val bottom: Float = recognitions[i].location.bottom / mRatioY
 
-            var isHuman: Boolean = false
-
-            if (recognitions[i].title.contains("person")) {
-                isHuman = true
-            }
-
             Log.i(
                 "mObjectHash",
                 "mRatioX : $mRatioX, mRaitoY : $mRatioY, left : $left, top : $top, right : $right, bottom : $bottom"
             )
-            mObjectHash.put(RectF(left, top, right, bottom), isHuman)
+            mObjectHash.put(RectF(left, top, right, bottom), recognitions[i].title)
         }
     }
 
@@ -110,14 +116,13 @@ class ObjectDrawView : View {
 
         if (mObjectHash.isEmpty()) return
 
-        for ((rectF, isHuman) in mObjectHash.entries) {
-            if (isHuman) {
-                mPaint.color = resources.getColor(R.color.colorPrimary)
-                canvas.drawRect(rectF, mPaint)
-                humanRect = rectF
-            } else {
-                mPaint.color = resources.getColor(R.color.colorPrimary)
-            }
+        for ((rectF, title) in mObjectHash.entries) {
+            mPaint.color = resources.getColor(R.color.colorBaseTransparent)
+            canvas.drawRect(rectF, mPaint)
+            tPaint.textSize = (rectF.bottom - rectF.top)/5
+            tPaint.color = resources.getColor(R.color.colorPrimary)
+            canvas.drawText(title,
+                    (rectF.left).toFloat(), (rectF.top-5).toFloat(), tPaint)
         }
 
     }
