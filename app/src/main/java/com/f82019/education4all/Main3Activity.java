@@ -1,5 +1,6 @@
 package com.f82019.education4all;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +101,19 @@ public class Main3Activity extends AppCompatActivity
             profile_img = navigationView.getHeaderView(0).findViewById(R.id.imageView_profil);
             profile_name = navigationView.getHeaderView(0).findViewById(R.id.tv_profile_name);
             profile_email = navigationView.getHeaderView(0).findViewById(R.id.tv_profil_email);
+
+            navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame_container3, ProfileFragment.newInstance())
+                            .commit();
+
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            });
         }
 
         nav_login  = navigationView.getMenu().findItem(R.id.nav_login);
@@ -189,8 +204,10 @@ public class Main3Activity extends AppCompatActivity
                         .commit();
                 break;
             case R.id.nav_learn_to_write:
-                intent = new Intent(Main3Activity.this, Learn2WriteActivity.class);
-                startActivity(intent);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container3, (Fragment) Learn2WriteFragment.newInstance())
+                        .commit();
                 break;
         }
 
