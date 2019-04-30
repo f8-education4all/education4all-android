@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Object detection" />
         <item
-            android:id="@+id/nav_orc"
+            android:id="@+id/nav_ocr"
             android:icon="@drawable/ic_library_books_black_24dp"
             android:title="Read for you (OCR)" />
         <item

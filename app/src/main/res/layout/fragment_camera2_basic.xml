@@ -19,6 +19,14 @@
             android:id="@+id/textureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/ltViewDobby"
+            app:lottie_fileName="dobby-animation.json"
+            android:background="@color/colorTransparent"
+            android:layout_width="339dp"
+            android:layout_height="273dp"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"/>
         <com.f82019.education4all.mobilenet.ObjectDrawView
             android:id="@+id/objectDrawView"
             android:layout_width="match_parent"

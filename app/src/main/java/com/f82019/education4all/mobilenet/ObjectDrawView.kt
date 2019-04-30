@@ -19,8 +19,8 @@ class ObjectDrawView : View {
     private var mObjectHash = HashMap<RectF, String>()
     private var mWidth: Int = 0
     private var mHeight: Int = 0
-    private var mRatioX: Float = 0.toFloat()
-    private var mRatioY: Float = 0.toFloat()
+    var mRatioX: Float = 0.toFloat()
+    var mRatioY: Float = 0.toFloat()
     private var mImgWidth: Int = 0
     private var mImgHeight: Int = 0
     var humanRect : RectF = RectF()
@@ -119,10 +119,10 @@ class ObjectDrawView : View {
         for ((rectF, title) in mObjectHash.entries) {
             mPaint.color = resources.getColor(R.color.colorBaseTransparent)
             canvas.drawRect(rectF, mPaint)
-            tPaint.textSize = (rectF.bottom - rectF.top)/5
+            tPaint.textSize = (rectF.bottom - rectF.top)/7
             tPaint.color = resources.getColor(R.color.colorPrimary)
             canvas.drawText(title,
-                    (rectF.left).toFloat(), (rectF.top-5).toFloat(), tPaint)
+                    (rectF.right+rectF.left)*0.5f, (rectF.top-5), tPaint)
         }
 
     }

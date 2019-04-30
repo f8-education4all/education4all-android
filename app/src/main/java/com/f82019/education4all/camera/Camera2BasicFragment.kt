@@ -40,6 +40,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.airbnb.lottie.LottieAnimationView
+import com.f82019.education4all.Main3Activity.*
 import com.f82019.education4all.R
 import com.f82019.education4all.mobilenet.MobilenetClassifier
 import com.f82019.education4all.mobilenet.MobilenetClassifierFloatException
@@ -67,9 +69,10 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
 
     private var objectDetectionClassifier : MobilenetClassifier? = null
     private var objectDrawView : ObjectDrawView? = null
+    private var ltViewDobby : LottieAnimationView? = null
 
-
-    protected var runDetector = false
+    protected var runObjectDetector = false
+    protected var runOcrDetector = false
     private var isFacingFront: Boolean = false
 
     /**
@@ -229,11 +232,11 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
     private val periodicClassify = object : Runnable {
         override fun run() {
             synchronized(lock) {
-                if (runDetector) {
+                if (runObjectDetector) {
                     classifyObject()
                 }
             }
-            backgroundHandler!!.postDelayed(this, 300)
+            backgroundHandler!!.postDelayed(this,300)
         }
     }
 
@@ -248,7 +251,10 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         textureView = view.findViewById(R.id.textureView)
         layoutFrame = view.findViewById(R.id.layoutFrame)
         objectDrawView = view.findViewById(R.id.objectDrawView)
-//        drawView = view.findViewById(R.id.drawView)
+        ltViewDobby = view.findViewById(R.id.ltViewDobby)
+        ltViewDobby.apply {
+            this?.visibility = View.INVISIBLE
+        }
 
         try {
             objectDetectionClassifier = MobilenetClassifierFloatException.create(activity)
@@ -490,9 +496,13 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         backgroundThread!!.start()
         backgroundHandler = Handler(backgroundThread!!.looper)
         synchronized(lock) {
-            runDetector = true
+            runObjectDetector = true
+            if (state == OCR){
+                runOcrDetector = true
+                runObjectDetector = false
+            }
         }
-        backgroundHandler!!.postDelayed(periodicClassify, 300)
+        backgroundHandler!!.postDelayed(periodicClassify,300)
     }
 
     /**
@@ -505,7 +515,8 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
             backgroundThread = null
             backgroundHandler = null
             synchronized(lock) {
-                runDetector = false
+                runObjectDetector = false
+                runOcrDetector = false
             }
         } catch (e: InterruptedException) {
             Log.e(TAG, "Interrupted when stopping background thread", e)
@@ -628,6 +639,23 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
         objectDrawView?.invalidate()
 
+        if (objectDetectionClassifier!!.recognitions.isNullOrEmpty() == false){
+            activity?.runOnUiThread {
+                ltViewDobby?.apply {
+                    val width = objectDetectionClassifier!!.recognitions[0].location.right / objectDrawView!!.mRatioX
+                    - objectDetectionClassifier!!.recognitions[0].location.left / objectDrawView!!.mRatioX
+                    val height = width*0.805f
+                    this?.visibility = View.VISIBLE
+                    this?.x = objectDetectionClassifier!!.recognitions[0].location.left / objectDrawView!!.mRatioX - width*0.3f
+                    this?.y = objectDetectionClassifier!!.recognitions[0].location.top / objectDrawView!!.mRatioY - height*0.5f
+                    this?.requestLayout()
+                }
+            }
+            if (ltViewDobby?.isAnimating != true)
+                ltViewDobby?.playAnimation()
+        }else{
+            ltViewDobby?.visibility = View.INVISIBLE
+        }
     }
 
     /**
