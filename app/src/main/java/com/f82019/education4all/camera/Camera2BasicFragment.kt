@@ -35,16 +35,11 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.util.Size
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
-import com.f82019.education4all.Main3Activity.*
+import com.f82019.education4all.Main3Activity.OCR
+import com.f82019.education4all.Main3Activity.state
 import com.f82019.education4all.R
 import com.f82019.education4all.mobilenet.MobilenetClassifier
 import com.f82019.education4all.mobilenet.MobilenetClassifierFloatException
@@ -662,11 +657,11 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         bitmap.recycle()
 
         activity?.runOnUiThread {
+
+            objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
+            objectDrawView?.invalidate()
+
             if (objectDetectionClassifier!!.recognitions.isNullOrEmpty() == false) {
-
-                objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
-                objectDrawView?.invalidate()
-
                 ltViewDobby?.apply {
                     val width = objectDetectionClassifier!!.recognitions[0].location.right / objectDrawView!!.mRatioX
                     -objectDetectionClassifier!!.recognitions[0].location.left / objectDrawView!!.mRatioX

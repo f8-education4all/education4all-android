@@ -27,6 +27,7 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
     private static final int PIXEL_WIDTH = 28;
     private TextToSpeech tts;
     private int current_goal = 0;
+    private float points = 0;
 
     // ui elements
     private Button clearBtn, classBtn;
@@ -87,14 +88,18 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void new_user_goal(){
+
         ((TextView) findViewById(R.id.tv_learn2_goal)).setText(String.format(Locale.US, "%d", goals[current_goal]));
         tts.speak(
           String.format(Locale.US, "Please, draw a %d", goals[current_goal]),
-          TextToSpeech.QUEUE_FLUSH,
+          TextToSpeech.QUEUE_ADD,
           null
         );
 
-
+        //clear the drawing
+        /*drawModel.clear();
+        drawView.reset();
+        drawView.invalidate();*/
     }
 
     //the activity lifecycle
@@ -168,16 +173,36 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
                     //else output its name
                     text += String.format(Locale.US, "%s", res.getLabel());
 
-                    tts.speak(
-                            String.format(Locale.US, "Good work, i think it is a %s\n", res.getLabel()),
-                                    TextToSpeech.QUEUE_FLUSH,
-                                    null);
-                    if(res.getConf() > 0.8 && (goals[current_goal] + "").equals(res.getLabel())){
+
+                    ((TextView) findViewById(R.id.tv_learn2_accuracy))
+                            .setText(String.format(Locale.US, "Accuracy: %.2f", res.getConf()));
+
+                    if(res.getConf() >= 0.70 && (goals[current_goal] + "").equals(res.getLabel())){
+
+                        tts.speak(
+                                String.format(Locale.US, "Yes, it is a %s\n", res.getLabel()),
+                                TextToSpeech.QUEUE_FLUSH,
+                                null);
+
+                        points += (res.getConf() * 100);
+                        ((TextView) findViewById(R.id.tv_learn2_score))
+                                .setText(String.format(Locale.US, "Points: %.0f", points));
+
                         current_goal += 1;
-                        if(current_goal >= goals.length)
+                        if(current_goal >= goals.length){
                             current_goal = 0;
-                        new_user_goal();
+                            tts.speak(String.format(Locale.US, "Congratulations! You just completed the lesson with %.0f points. Let's try again.", points),
+                                    TextToSpeech.QUEUE_ADD,
+                                    null
+                            );
+                            points = 0;
+                        }
+
+                    }else{
+                        tts.speak("It is not good enough.", TextToSpeech.QUEUE_ADD, null);
                     }
+
+                    new_user_goal();
                 }
             }
             resText.setText(text);
