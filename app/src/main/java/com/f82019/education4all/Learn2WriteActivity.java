@@ -2,8 +2,10 @@ package com.f82019.education4all;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +19,14 @@ import com.f82019.education4all.views.DrawView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class Learn2WriteActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener  {
+public class Learn2WriteActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener,
+        TextToSpeech.OnInitListener {
 
     private static final int PIXEL_WIDTH = 28;
+    private TextToSpeech tts;
+    private int current_goal = 0;
 
     // ui elements
     private Button clearBtn, classBtn;
@@ -35,12 +41,16 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
     private float mLastX;
     private float mLastY;
 
+    private Integer[] goals;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learn2_write);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        tts = new TextToSpeech(this, this);
 
         //get drawing view from XML (where the finger writes the number)
         drawView = (DrawView) findViewById(R.id.draw);
@@ -69,6 +79,21 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
         // tensorflow
         //load up our saved model to perform inference from local storage
         loadModel();
+
+        goals = new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        new_user_goal();
+
+    }
+
+    private void new_user_goal(){
+        ((TextView) findViewById(R.id.tv_learn2_goal)).setText(String.format(Locale.US, "%d", goals[current_goal]));
+        tts.speak(
+          String.format(Locale.US, "Please, draw a %d", goals[current_goal]),
+          TextToSpeech.QUEUE_FLUSH,
+          null
+        );
+
 
     }
 
@@ -138,14 +163,25 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
                 final Classification res = classifier.recognize(pixels);
                 //if it can't classify, output a question mark
                 if (res.getLabel() == null) {
-                    text += classifier.name() + ": ?\n";
+                    text += "?";
                 } else {
                     //else output its name
-                    text += String.format("%s: %s, %f\n", classifier.name(), res.getLabel(),
-                            res.getConf());
+                    text += String.format(Locale.US, "%s", res.getLabel());
+
+                    tts.speak(
+                            String.format(Locale.US, "Good work, i think it is a %s\n", res.getLabel()),
+                                    TextToSpeech.QUEUE_FLUSH,
+                                    null);
+                    if(res.getConf() > 0.8 && (goals[current_goal] + "").equals(res.getLabel())){
+                        current_goal += 1;
+                        if(current_goal >= goals.length)
+                            current_goal = 0;
+                        new_user_goal();
+                    }
                 }
             }
             resText.setText(text);
+            ((TextView) findViewById(R.id.tv_learn2_user_result)).setText(text);
         }
     }
 
@@ -214,5 +250,34 @@ public class Learn2WriteActivity extends AppCompatActivity implements View.OnCli
 
     private void processTouchUp() {
         drawModel.endLine();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        // Don't forget to shutdown!
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+
+            int result = tts.setLanguage(Locale.US);
+            // tts.setPitch(5); // set pitch level
+            // tts.setSpeechRate(2); // set speech speed rate
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Language is not supported");
+            }
+
+        } else {
+            Log.e("TTS", "Initilization Failed");
+        }
     }
 }

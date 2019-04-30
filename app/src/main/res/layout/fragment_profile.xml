@@ -70,5 +70,22 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:padding="5dp"
+        android:background="@drawable/shadow_frame"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnWidth="70dp"
+            android:numColumns="auto_fit"
+            android:id="@+id/grid_profil_words"/>
+    </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

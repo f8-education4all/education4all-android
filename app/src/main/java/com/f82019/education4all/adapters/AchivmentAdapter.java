@@ -23,8 +23,8 @@ public class AchivmentAdapter extends ArrayAdapter<Archivment> {
     public AchivmentAdapter( Context context, int resource,  List<Archivment> objects) {
         super(context, resource, objects);
 
-        this.context = context;
         this.archivments = objects;
+        this.context = context;
 
         inflater = LayoutInflater.from(context);
     }
