@@ -9,7 +9,7 @@
 </div>
 <br/>
 <br/>
-## App Download
+## App Download <br/>
 https://github.com/f8-education4all/education4all-android/blob/master/app/release/app-release.apk
 <br/>
 <br/>
