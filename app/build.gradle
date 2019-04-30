@@ -6,17 +6,27 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.f82019.education4all"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_static" //, "-DANDROID_TOOLCHAIN=clang"
+                cppFlags "-std=c++11 -fexceptions"
+            }
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
     }
 }
 
@@ -32,6 +42,11 @@ dependencies {
     implementation "com.facebook.android:facebook-login:$fb_login_version"
     //lottie
     implementation "com.airbnb.android:lottie:$lottie_version"
+    //tensorflow-lite
+    implementation 'org.tensorflow:tensorflow-lite:1.10.0'
+    //firebase
+    implementation "com.google.firebase:firebase-ml-vision:$firebase_ml_vision_version"
+    implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
@@ -45,3 +60,4 @@ dependencies {
 repositories {
     mavenCentral()
 }
+apply plugin: 'com.google.gms.google-services'

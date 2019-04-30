@@ -30,7 +30,10 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class Main3Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    static final int LOGIN_ACT = 123;
+    public static final int LOGIN_ACT = 123;
+    public static final int OBJECT_DETECT = 124;
+    public static final int OCR = 125;
+    public static int state = 0;
     private AccessTokenTracker accessTokenTracker;
 
     ImageView profile_img;
@@ -155,6 +158,14 @@ public class Main3Activity extends AppCompatActivity
 
                 break;
             case R.id.nav_object_detection:
+                state = OBJECT_DETECT;
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container3, new Camera2BasicFragment())
+                        .commit();
+                break;
+            case R.id.nav_ocr:
+                state = OCR;
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.frame_container3, new Camera2BasicFragment())
