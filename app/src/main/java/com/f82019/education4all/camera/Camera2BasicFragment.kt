@@ -17,12 +17,14 @@
 package com.f82019.education4all.camera
 
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.DialogFragment
+import android.app.Fragment
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.hardware.camera2.*
 import android.media.ImageReader
 import android.os.Bundle
@@ -32,6 +34,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.util.Size
+<<<<<<< HEAD
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.TextureView
@@ -52,6 +55,11 @@ import java.util.ArrayList
 import java.util.Arrays
 import java.util.Collections
 import java.util.Comparator
+=======
+import android.view.*
+import com.f82019.education4all.R
+import java.util.*
+>>>>>>> a18b8619b88ba7a83c4527253250554b610a3d0c
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 

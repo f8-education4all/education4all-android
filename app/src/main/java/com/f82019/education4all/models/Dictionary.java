@@ -7,6 +7,12 @@ public class Dictionary extends SugarRecord {
     private String description;
     private String example_sentences;
 
+    public Dictionary(String word, String description, String example_sentences) {
+        this.word = word;
+        this.description = description;
+        this.example_sentences = example_sentences;
+    }
+
     public String getWord() {
         return word;
     }

@@ -11,37 +11,86 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#ddd"
     tools:showIn="@layout/activity_learn2_write">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="Please draw a :"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="70sp"
+            android:id="@+id/tv_learn2_goal"
+            android:text="1"
+            android:textColor="#000"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
     <com.f82019.education4all.views.DrawView
         android:id="@+id/draw"
+        android:background="@drawable/shadow_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         >
 
         <Button
+            android:drawableLeft="@drawable/ic_close_black_24dp"
             android:id="@+id/btn_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear"
+            android:text=" Clear"
             />
 
         <Button
+            android:drawableLeft="@drawable/ic_check_black_24dp"
             android:id="@+id/btn_class"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detect"
+            android:text=" Detect"
             />
-    </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_centerVertical="true"
+            android:text="We guest it is a :"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="70sp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tv_learn2_user_result"
+            android:text="1"
+            android:textColor="#000"
+            android:textStyle="bold"/>
+
+
+    </RelativeLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tfRes"
         android:layout_width="match_parent"
         android:layout_height="150dp"
