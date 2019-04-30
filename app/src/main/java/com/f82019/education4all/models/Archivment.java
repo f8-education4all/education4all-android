@@ -6,7 +6,14 @@ public class Archivment extends SugarRecord {
     private String archivment;
     private String description;
     private String goal;
-    private String logo;
+    private int logo;
+
+    public Archivment(String archivment, String description, String goal, int logo) {
+        this.archivment = archivment;
+        this.description = description;
+        this.goal = goal;
+        this.logo = logo;
+    }
 
     public String getArchivment() {
         return archivment;
@@ -32,11 +39,11 @@ public class Archivment extends SugarRecord {
         this.goal = goal;
     }
 
-    public String getLogo() {
+    public int getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(int logo) {
         this.logo = logo;
     }
 
