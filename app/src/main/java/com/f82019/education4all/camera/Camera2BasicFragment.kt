@@ -41,6 +41,7 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
@@ -78,9 +79,11 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
     private var isFacingFront: Boolean = false
 
     protected var tvResult: TextView? = null
+    private var switchSpeak: Switch? = null
     private var textToSpeech: TextToSpeech? = null
     private var previousElementText: String = ""
     private var blockString: String = ""
+    private var isSpeakAvailable: Boolean = true
 
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
@@ -242,7 +245,6 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
                 if (runObjectDetector) {
                     classifyObject()
                 }
-
                 if (runOcrDetector) {
                     detectText()
                 }
@@ -269,6 +271,15 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         tvResult = view.findViewById(R.id.tvResult)
         tvResult.apply {
             this?.visibility = View.INVISIBLE
+        }
+        switchSpeak = view.findViewById(R.id.switchSpeak)
+        switchSpeak?.isChecked = true
+        switchSpeak?.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                isSpeakAvailable = true
+            } else {
+                isSpeakAvailable = false
+            }
         }
 
         try {
@@ -662,10 +673,9 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
         bitmap.recycle()
 
         activity?.runOnUiThread {
+            objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
+            objectDrawView?.invalidate()
             if (objectDetectionClassifier!!.recognitions.isNullOrEmpty() == false) {
-
-                objectDrawView!!.setDrawPoint(objectDetectionClassifier!!.recognitions)
-                objectDrawView?.invalidate()
 
                 ltViewDobby?.apply {
                     val width = objectDetectionClassifier!!.recognitions[0].location.right / objectDrawView!!.mRatioX
@@ -682,6 +692,16 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
                 ltViewDobby?.visibility = View.INVISIBLE
             }
         }
+
+        if (objectDetectionClassifier!!.recognitions.isNullOrEmpty() == false) {
+            if (isSpeakAvailable) {
+                if (previousElementText.contains(objectDetectionClassifier!!.recognitions[0].title) == false){
+                    textToSpeech?.speak(objectDetectionClassifier!!.recognitions[0].title, TextToSpeech.SUCCESS, null, null)
+                }
+            }
+            previousElementText = objectDetectionClassifier!!.recognitions[0].title
+        }
+
 
     }
 
@@ -709,9 +729,11 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
                         val eleTxt = blockString.replace(" ", "")
                         val prevTxt = previousElementText.replace(" ", "")
 
-                        if ((eleTxt.contains(prevTxt) == false) && ((prevTxt.contains(eleTxt))) == false) {
-                            textToSpeech?.speak(blockString, TextToSpeech.SUCCESS, null, null)
-                            activity?.runOnUiThread { tvResult?.visibility = View.INVISIBLE }
+                        if (isSpeakAvailable) {
+                            if ((eleTxt.contains(prevTxt) == false) && ((prevTxt.contains(eleTxt))) == false) {
+                                textToSpeech?.speak(blockString, TextToSpeech.SUCCESS, null, null)
+                                activity?.runOnUiThread { tvResult?.visibility = View.INVISIBLE }
+                            }
                         }
                         showResult(blockString)
                         previousElementText = blockString
