@@ -31,6 +31,15 @@
             android:id="@+id/objectDrawView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tvResult"
+            tools:text="@string/app_name"
+            android:textColor="@color/colorPrimary"
+            android:padding="20dp"
+            android:textSize="16sp"
+            android:background="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </com.f82019.education4all.camera.AutoFitFrameLayout>
 
     <android.support.constraint.ConstraintLayout
