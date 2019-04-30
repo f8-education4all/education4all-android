@@ -162,6 +162,17 @@ public class Main3Activity extends AppCompatActivity
                 break;
             case R.id.nav_ocr:
                 state = OCR;
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container3, new Camera2BasicFragment())
+                        .commit();
+                break;
+            case R.id.nav_ocr:
+                state = OCR;
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_container3, new Camera2BasicFragment())
+                        .commit();
                 break;
             case R.id.nav_learn_to_write:
                 getFragmentManager()
