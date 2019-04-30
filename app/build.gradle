@@ -44,6 +44,9 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottie_version"
     //tensorflow-lite
     implementation 'org.tensorflow:tensorflow-lite:1.10.0'
+    //firebase
+    implementation "com.google.firebase:firebase-ml-vision:$firebase_ml_vision_version"
+    implementation "com.google.firebase:firebase-core:$firebase_core_version"
 
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
@@ -57,3 +60,4 @@ dependencies {
 repositories {
     mavenCentral()
 }
+apply plugin: 'com.google.gms.google-services'
