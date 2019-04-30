@@ -1,12 +1,17 @@
+<p align="center">
+  <br>
+  <img src="https://www.advertisemint.com/wp-content/uploads/2018/12/facebook-f8-1024x686.png" height="343"/>
+</p>
+
 # Education4All
 
 **by Team Ms.Torch**
 
-<div align="center">
+<p align="center">
   <img src="images/login.gif" height="400"/>
   <img src="images/object_detection.gif" height="400"/>
   <img src="images/ocr.gif" height="400"/>
-</div>
+</p>
 
 <br>
 <br>
@@ -20,6 +25,15 @@ https://github.com/f8-education4all/education4all-android/blob/master/app/releas
 </p>
 
 > Facebook login can be skipped with skip button like the screen above !
+
+<p align="center">
+<img src="https://i5.walmartimages.ca/images/Large/428/5_r/6000195494285_R.jpg" height="400"/>
+<img src="https://www.ikea.com/us/en/images/products/stefan-chair-black__0122106_PE278491_S4.jpg" height="400"/>
+<img src="https://sc02.alicdn.com/kf/UT8D0v_XthaXXagOFbX6/Wholelsale-Disposable-PET-Plastic-Cup-with-lids.jpg" height="400"/>
+</p>
+
+> Let's try to detect several objects surrounding u !
+> Here are example images for you.
 
 <br>
 <br>
