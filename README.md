@@ -7,19 +7,20 @@
   <img src="images/object_detection.gif" height="400"/>
   <img src="images/ocr.gif" height="400"/>
 </div>
-<br/>
-<br/>
-## App Download <br/>
+
+<br>
+<br>
+
+## App Download
 https://github.com/f8-education4all/education4all-android/blob/master/app/release/app-release.apk
-<br/>
-<br/>
+<br>
+<br>
 <p align="center"><br/><img src="images/1_fb_login.png" height="400"/>
 </p>
-
 > Facebook login can be skipped with skip button like the screen above !
-
-
-
+<br>
+<br>
+<br>
 Last day, someone at the Facebook presentations catechized the audience with this quote:'Nobody cares how much you know until they know how much you care', Theodore Roosevelt
 
 "When we teach someone how to read and write, it affects the person throughout his or her life. And the positive effects extend to families, friends, and communities. This is the goal we are aiming for."
