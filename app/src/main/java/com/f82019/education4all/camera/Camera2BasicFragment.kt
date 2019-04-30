@@ -684,30 +684,37 @@ class Camera2BasicFragment : Fragment(), ActivityCompat.OnRequestPermissionsResu
     }
 
     private fun detectText() {
-        activity?.runOnUiThread{
-            tvResult?.visibility = View.INVISIBLE
-        }
         val txtBitmap = textureView!!.getBitmap(360, 480)
         val detector = FirebaseVision.getInstance()
                 .onDeviceTextRecognizer
-        val image = FirebaseVisionImage.fromBitmap(txtBitmap)
-        val result = detector.processImage(image)
-                .addOnSuccessListener { firebaseVisionText ->
-                    for (block in firebaseVisionText.textBlocks) {
-                        for (line in block.lines) {
-                            blockString += "\n"
-                            for (element in line.elements) {
+        if(txtBitmap != null){
+            blockString = ""
+            val image = FirebaseVisionImage.fromBitmap(txtBitmap)
+            val result = detector.processImage(image)
+                    .addOnSuccessListener { firebaseVisionText ->
+                        for (block in firebaseVisionText.textBlocks) {
+                            for (line in block.lines) {
+                                blockString += "\n"
+                                for (element in line.elements) {
 //                            textAreaDrawView?.setDrawPoint(element.boundingBox!!)
-                                val elementText = element.text.toString()
-                                val elementCornerPoints = element.cornerPoints
+                                    val elementText = element.text.toString()
+                                    val elementCornerPoints = element.cornerPoints
 
-                                blockString += elementText + " "
+                                    blockString += elementText + " "
+                                }
                             }
                         }
+                        val eleTxt = blockString.replace(" ", "")
+                        val prevTxt = previousElementText.replace(" ", "")
+
+                        if ((eleTxt.contains(prevTxt) == false)&&((prevTxt.contains(eleTxt)))== false){
+                            textToSpeech?.speak(blockString, TextToSpeech.SUCCESS, null, null)
+                            activity?.runOnUiThread{ tvResult?.visibility = View.INVISIBLE }
+                        }
+                        showResult(blockString)
+                        previousElementText = blockString
                     }
-                    showResult(blockString)
-                    textToSpeech?.speak(blockString, TextToSpeech.SUCCESS, null, null)
-                }
+        }
     }
 
 private fun showResult(text: String) {

@@ -159,6 +159,9 @@ public class Main3Activity extends AppCompatActivity
                 break;
             case R.id.nav_object_detection:
                 state = OBJECT_DETECT;
+                break;
+            case R.id.nav_ocr:
+                state = OCR;
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.frame_container3, new Camera2BasicFragment())
