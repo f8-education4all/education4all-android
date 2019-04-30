@@ -7,16 +7,12 @@
   <img src="images/object_detection.gif" height="400"/>
   <img src="images/ocr.gif" height="400"/>
 </div>
-
-
-
+<br/>
+<br/>
 ## App Download
-
-
-
-
-
-
+https://github.com/f8-education4all/education4all-android/blob/master/app/release/app-release.apk
+<br/>
+<br/>
 <p align="center"><br/><img src="images/1_fb_login.png" height="400"/>
 </p>
 
