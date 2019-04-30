@@ -15,9 +15,12 @@
 https://github.com/f8-education4all/education4all-android/blob/master/app/release/app-release.apk
 <br>
 <br>
+
 <p align="center"><br/><img src="images/1_fb_login.png" height="400"/>
 </p>
+
 > Facebook login can be skipped with skip button like the screen above !
+
 <br>
 <br>
 <br>
